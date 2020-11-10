@@ -1,3 +1,3 @@
-CLassia core version: 1.3.1
+Classia core version: 1.4.4
 
 Primary dependencies: Firebase, MUI, Tailwind

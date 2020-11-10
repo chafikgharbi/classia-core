@@ -7,11 +7,7 @@ import Profile from "./components/Profile"
 import SVGIcon from "./library/icon"
 import firebase, { firestore, storage } from "./library/firebase"
 import server, { query } from "./library/api"
-import { _t } from "./library/translation"
-
-const __ = _t
-
-// todo: remove this comment line
+import { _t as __ } from "./library/translation"
 
 export {
   __,
