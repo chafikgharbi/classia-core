@@ -602,7 +602,7 @@ export default function Entries(props) {
               label={__(field.name)}
             >
               <MenuItem value="">{__("Sélectionnez ...")}</MenuItem>
-              {props.state.levels.map((level, index) => {
+              {(props.state.levels || []).map((level, index) => {
                 return <MenuItem key={index} value={level.id}>
                   {props.state.lang == "ar" ? level.name_ar : level.name}
                 </MenuItem>
