@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import server, { query } from "../library/api";
+import { query } from "../library/api";
 import { __ } from "../library/translation"
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';

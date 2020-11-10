@@ -117,7 +117,6 @@ export default function Entries(props) {
   }, [data.level])
 
   useEffect(() => {
-    console.log(storedRows)
     fields.map(field => {
       if (field.depends && field.depends.split(".").length > 1) {
         let split = field.depends.split(".")

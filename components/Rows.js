@@ -152,7 +152,7 @@ export default class Rows extends Component {
     if (this.props.onlyFields && this.props.returnFields) return <></>
 
     const table = <>
-      {this.props.title &&
+      {!this.props.noHeader &&
         <Header {...this.props}
           title={this.props.title}
           filterFields={this.props.filterFields}
@@ -254,8 +254,8 @@ export default class Rows extends Component {
           }
           {this.props.view == "grid" ?
             <>
-              {this.props.title &&
-                <div className="-m-5">
+              {!this.props.noHeader &&
+                <Paper>
                   <Header {...this.props}
                     title={this.props.title}
                     filterFields={this.props.filterFields}
@@ -268,7 +268,7 @@ export default class Rows extends Component {
                       this.setState({ editModal: true, edit_row_id: null })
                     }}
                   />
-                </div>
+                </Paper>
               }
               {this.state.loadingData ?
                 <div className="flex items-center justify-center pb-10 mt-10">
