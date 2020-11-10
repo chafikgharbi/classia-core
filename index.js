@@ -11,8 +11,6 @@ import { _t } from "./library/translation"
 
 const __ = _t
 
-// todo: remove this comment line
-
 export {
   __,
   App,
