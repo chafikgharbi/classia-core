@@ -251,11 +251,14 @@ function Layout(props) {
           >
             <MenuIcon />
           </IconButton>
-          <img src={props.tenant.logo} style={{ height: "50px" }} />
-          <Typography className="flex-grow" variant="h6" noWrap>
-            <div className="mx-3">{props.tenant.title}</div>
-          </Typography>
-
+          <div className="flex-grow">
+            {(!config.logo || config.logo == "image" || config.logo == "image-title") &&
+              <img src={props.tenant.logo} style={{ height: "50px" }} />
+            }
+            {(!config.logo || config.logo == "title" || config.logo == "image-title") &&
+              <Typography variant="h6" noWrap><div className="mx-3">{props.tenant.title}</div></Typography>
+            }
+          </div>
           <div className="flex items-center mx-2">
             <div className="px-2"><CalendarIcon /></div>
             <Select
