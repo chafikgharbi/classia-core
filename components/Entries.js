@@ -3,6 +3,7 @@ import server, { query } from "../library/api";
 import { __ } from "../library/translation"
 import MenuItem from '@material-ui/core/MenuItem';
 import TextField from '@material-ui/core/TextField';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -25,6 +26,7 @@ import { useReactToPrint } from 'react-to-print';
 import { Editor } from '@tinymce/tinymce-react';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBars, faEllipsisV } from "@fortawesome/free-solid-svg-icons";
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const HtmlEditor = (props) => {
 
@@ -239,6 +241,10 @@ export default function Entries(props) {
             } else if (field.default) {
               setValue(field.id, field.default, field.type)
             }
+            // If fields has password that means it is made for access
+            if (field.type == "password") {
+              checkAccess(row.id)
+            }
           })
 
           // Set predefined
@@ -265,6 +271,48 @@ export default function Entries(props) {
       setDefaults()
     }
   }, [])
+
+  const [access, setAccess] = useState(null)
+
+  const checkAccess = (id) => {
+    server({
+      method: "get",
+      url: "/rows/getAccess/" + id,
+      headers: { authorization: "Bearer " + props.token }
+    })
+      .then(res => {
+        console.log("access", res.data)
+        if (res.data.email) {
+          setAccess(true)
+        } else {
+          setAccess(false)
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        setAccess(false)
+      });
+  }
+
+  const deleteAccess = () => {
+    if (confirm(
+      `Voulez-vous supprimer l'accès de ${data.first_name ? data.first_name : data.email} ?`
+    )) {
+      setAccess(null)
+      server({
+        method: "post",
+        url: "/rows/deleteAccess/" + props.id,
+        headers: { authorization: "Bearer " + props.token }
+      })
+        .then(res => {
+          setAccess(false)
+        })
+        .catch(error => {
+          console.log(error);
+          setAccess(true)
+        });
+    }
+  }
 
   const sanitizeData = () => {
     let newData = data
@@ -563,8 +611,25 @@ export default function Entries(props) {
             autoComplete="new-password"
             label={__(field.name)}
             variant="outlined"
-            value={val}
-            onChange={e => onChange(e.target.value)} />
+            disabled={access === null}
+            value={access && !val ? "000000" : val}
+            onChange={e => onChange(e.target.value)}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='end'>
+                  {access === null &&
+                    <CircularProgress size={20} className="ml-2" />
+                  }
+                  {access &&
+                    <IconButton
+                      onClick={deleteAccess}>
+                      <CloseIcon />
+                    </IconButton>
+                  }
+                </InputAdornment>
+              ),
+            }}
+          />
         </div>
       case "select":
         return <div className="p-3" key={field.id}>
