@@ -251,7 +251,7 @@ function Layout(props) {
           >
             <MenuIcon />
           </IconButton>
-          <div className="flex-grow">
+          <div className="flex-grow flex items-center">
             {(!config.logo || config.logo == "image" || config.logo == "image-title") &&
               <img src={props.tenant.logo} style={{ height: "50px" }} />
             }

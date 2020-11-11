@@ -54,10 +54,6 @@ export default function Profile(props) {
   const [documents, setDocuments] = useState([])
   const [printAnchor, setPrintAnchor] = useState(null)
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-
   const getRow = () => {
     props.loading(true)
     setLoading(true)
@@ -172,7 +168,7 @@ export default function Profile(props) {
         })
       }
       <Paper classes={{ root: classes.header }}>
-        <div className="flex flex-wrap border-b border-gray-400 p-2">
+        {props.header && <div className="flex flex-wrap border-b border-gray-400 p-2">
           {props.header.photo &&
             <div className="p-3">
               <Paper>
@@ -234,13 +230,16 @@ export default function Profile(props) {
               </div>
             }
           </div>
-        </div>
+        </div>}
         <div className="">
           <Tabs
             value={value}
             indicatorColor="primary"
             textColor="primary"
-            onChange={handleChange}
+            onChange={(event, newValue) => {
+              setValue(newValue)
+              if (props.onTabChange) props.onTabChange(newValue)
+            }}
             aria-label="disabled tabs example"
           >
             {props.tabs.map((tab, index) =>
