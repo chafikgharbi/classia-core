@@ -40,7 +40,7 @@ export default function PageHeader(props) {
   const [openImporter, setOpenImporter] = useState(false)
 
   useEffect(() => {
-    if (values.level && values.level[1]) {
+    if (props.state.levels && values.level && values.level[1]) {
       let subjects = []
       let level = props.state.levels.filter(l => l.id == values.level[1])[0]
       if (level) {
@@ -196,7 +196,7 @@ export default function PageHeader(props) {
                         label="Niveau"
                       >
                         <MenuItem value="">Tous les niveaux</MenuItem>
-                        {props.state.levels.map((level, index) => {
+                        {(props.state.levels || []).map((level, index) => {
                           return <MenuItem key={index} value={level.id}>{level.name}</MenuItem>
                         })}
                       </Select>

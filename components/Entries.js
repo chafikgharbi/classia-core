@@ -241,10 +241,6 @@ export default function Entries(props) {
             } else if (field.default) {
               setValue(field.id, field.default, field.type)
             }
-            // If fields has password that means it is made for access
-            if (field.type == "password") {
-              checkAccess(row.id)
-            }
           })
 
           // Set predefined
@@ -273,6 +269,19 @@ export default function Entries(props) {
   }, [])
 
   const [access, setAccess] = useState(null)
+
+  useEffect(() => {
+    if (props.id) {
+      fields.map(field => {
+        // If fields has password that means it is made for access
+        if (field.type == "password") {
+          checkAccess(props.id)
+        }
+      })
+    } else {
+      setAccess(false)
+    }
+  }, [])
 
   const checkAccess = (id) => {
     server({
