@@ -59,6 +59,7 @@ export default function Profile(props) {
     setLoading(true)
     query({
       ref: ["=", props.router.query.ref],
+      ...(props.filter || {}),
       _token: props.token
     },
       (res) => {
@@ -92,18 +93,20 @@ export default function Profile(props) {
   }
 
   const getDocuments = () => {
-    query({
-      model: ["=", "document"],
-      for: ["=", props.model],
-      _token: props.token
-    },
-      (res) => {
-        console.log("docs", res.data)
-        setDocuments(res.data.rows)
+    if (props.restrict && props.restrict.type) {
+      query({
+        model: ["=", "document"],
+        for: ["=", props.restrict.type],
+        _token: props.token
       },
-      (err) => {
-        console.log(err)
-      })
+        (res) => {
+          console.log("docs", res.data)
+          setDocuments(res.data.rows)
+        },
+        (err) => {
+          console.log(err)
+        })
+    }
   }
 
   useEffect(() => {
@@ -127,13 +130,20 @@ export default function Profile(props) {
     let newContent = content.replace(/([\[(])(.+?)([\])])/g,
       (match, p1, p2, p3, offset, string) => {
         console.log(p2)
-        if (p2 == "DATE") {
-          return moment(new Date()).format('YYYY-MM-DD')
+        if (p2.includes("YYYY") && p2.includes("MM") && p2.includes("DD")) {
+          return moment(new Date()).format(p2)
+        }
+        else if (p2.includes(":")) {
+          let split = p2.split(":")
+          let field = fields.filter(f =>
+            f.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "") == split[0]
+          )[0] || {}
+          return row[field.id + "_data"] ? row[field.id + "_data"][split[1]] : p1 + p2 + p3
         }
         let field = fields.filter(f =>
           f.name.normalize("NFD").replace(/[\u0300-\u036f]/g, "") == p2
         )[0] || {}
-        return row[field.id]
+        return row[field.id] ? row[field.id] : p1 + p2 + p3
       });
 
     return newContent
@@ -270,7 +280,7 @@ class ComponentToPrint extends React.Component {
   }
   render() {
     return <div className="entry-print"
-      style={{ padding: "30px" }}
+      style={{ padding: "80px" }}
       dangerouslySetInnerHTML={{ __html: this.props.content }}></div>
   }
 }

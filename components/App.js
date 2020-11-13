@@ -165,7 +165,7 @@ function App({ Component, pageProps }) {
 
   const routing = (user) => {
     if (user) {
-      if (Router.pathname == "/login") window.location.href = "/"
+      if (Router.pathname == "/login") router.push("/")
       setPublic(false)
     } else {
       if (!config.public.includes(Router.pathname)) {

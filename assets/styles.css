@@ -154,8 +154,8 @@ body {
     z-index: 9999999;
   }
 
-  .entry-text > * {
-    margin-bottom: 12px
+  .entry-print > * {
+    margin-bottom: 20px
   }
 
   .entry-print h1 {

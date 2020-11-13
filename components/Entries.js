@@ -51,11 +51,14 @@ const HtmlEditor = (props) => {
         'table'
       ],
       toolbar:
-        'undo redo | formatselect | bold italic backcolor | \
+        'undo redo | fontselect  fontsizeselect | bold italic underline forecolor backcolor | \
         alignleft aligncenter alignright alignjustify | \
         bullist numlist outdent indent | removeformat |  \
         table tabledelete | tableprops tablerowprops tablecellprops | tableinsertrowbefore tableinsertrowafter tabledeleterow | tableinsertcolbefore tableinsertcolafter tabledeletecol | \
-        help'
+        help',
+      fontsize_formats: '8pt 9pt 10pt 11pt 12pt 14pt 16pt 18pt 20pt' +
+        ' 24pt 26pt 28pt 30pt 32pt 36pt',
+      content_style: "body {padding: 80px}"
     }}
     onEditorChange={(content, editor) => {
       props.onChange(content)
