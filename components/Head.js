@@ -141,7 +141,7 @@ export default function PageHeader(props) {
             >
               {filterFields && filterFields.map((field, index) => {
                 return <div key={index} className="p-2" style={{ minWidth: "300px" }}>
-                  {field.type == "model" &&
+                  {field.type == "row" &&
                     <SelectRow
                       model={field.model}
                       filters={field.filters || []}

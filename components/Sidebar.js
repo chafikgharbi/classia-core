@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react"
-import Link from 'next/link'
 import { __ } from "../library/translation"
 import firebase from "../library/firebase"
 import Divider from '@material-ui/core/Divider'
@@ -71,14 +70,17 @@ export default function Sidebar(props) {
           {groupIndex > 0 && <Divider />}
           <List className={classes.list}>
             {list.map((item, index) => !item.items ?
-              <Link href={item.link} key={index}>
+              <div onClick={() => {
+                if (item.pathname) props.router.push(item.pathname, item.link)
+                else props.router.push(item.link)
+              }} key={index}>
                 <ListItem button component="a" onClick={props.onClose}>
                   <ListItemIcon>
                     {item.icon}
                   </ListItemIcon>
                   <ListItemText className={classes.text} primary={__(item.title)} />
                 </ListItem>
-              </Link> :
+              </div> :
               <div key={index}>
                 <ListItem button onClick={() => toggleItem(groupIndex, index)}>
                   <ListItemIcon>
@@ -91,11 +93,14 @@ export default function Sidebar(props) {
                 <Collapse in={item.open} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
                     {item.items.map((item, index) =>
-                      <Link href={item.link} key={index}>
+                      <div onClick={() => {
+                        if (item.pathname) props.router.push(item.pathname, item.link)
+                        else props.router.push(item.link)
+                      }} key={index}>
                         <ListItem button className={classes.nested} component="a" onClick={props.onClose}>
                           <ListItemText className={classes.text} primary={__(item.title)} />
                         </ListItem>
-                      </Link>
+                      </div>
                     )}
                   </List>
                 </Collapse>
