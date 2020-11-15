@@ -12,11 +12,8 @@ export default function Chart(props) {
 
   useEffect(() => {
     setLoading(true)
-    // todo: more url to server query function and check for _count there and apply it for all queries
     query({
       ...(props.filters || {}),
-      _start: 0,
-      _limit: 100,
       _token: props.token
     },
       res => {
@@ -30,6 +27,7 @@ export default function Chart(props) {
             borderWidth: 0,
             hoverBackgroundColor: props.type == "line" ? "" : dataset.hoverBackgroundColor || `rgba(${dataset.colorCode || "255,99,132"},0.4)`,
             hoverBorderColor: `rgba(${dataset.colorCode || "255,99,132"},1)`,
+            // props.data function shouldn't be async
             data: props.data(dataset.id, res.data)
           }
           newDatasets.push(newDataset)
