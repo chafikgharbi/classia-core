@@ -109,7 +109,7 @@ export default function PageHeader(props) {
                 </IconButton>
               }
               {props.actions && props.actions.includes("export") &&
-                <IconButton aria-label="Exporter" onClick={() => { }} >
+                <IconButton aria-label="Exporter" onClick={() => { props.onExport() }} >
                   <FontAwesomeIcon icon={faCloudDownloadAlt} className="text-base" />
                 </IconButton>
               }

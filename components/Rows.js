@@ -133,7 +133,6 @@ export default class Rows extends Component {
           pagination: res.data.pagination,
           loadingData: false,
         })
-        console.log("rows", res.data)
       },
       err => {
         console.log(err);
@@ -145,6 +144,64 @@ export default class Rows extends Component {
   refresh = () => {
     console.log("refresh")
     this.getRows(this.state.rowsPerPage * (this.state.currentPage - 1))
+  }
+
+  export = () => {
+
+    function escape(string) {
+      if (string) {
+        if (string.includes('"')) {
+          return '"' + string + '"';
+        }
+        if (string.includes(",")) {
+          return '"' + string + '"';
+        }
+        return string
+      }
+      else return ""
+    }
+
+    var results = [[]];
+
+    this.props.columns.map(col => {
+      if (col.type == "person") {
+        results[0].push("Nom")
+        results[0].push("Prénom")
+        results[0].push("Matricule")
+      }
+      else if (col.selector || col.cell) results[0].push(col.name)
+    })
+
+    this.state.rows.map(row => {
+      let line = []
+      this.props.columns.map(col => {
+        if (col.type == "person") {
+          let person = row[col.selector + "_data"] || row
+          line.push(escape(person.last_name))
+          line.push(escape(person.first_name))
+          line.push(escape(person.model == "person" ? person.ref : ""))
+        }
+        else if (col.cell) line.push(escape(col.cell(row)))
+        else if (col.selector) line.push(escape(row[col.selector]))
+      })
+      results.push(line)
+    })
+
+    console.log(results)
+
+    var CsvString = "";
+    results.forEach((RowItem, RowIndex) => {
+      RowItem.forEach((ColItem, ColIndex) => {
+        CsvString += ColItem + ',';
+      });
+      CsvString += "\r\n";
+    });
+    CsvString = "data:application/csv," + encodeURIComponent(CsvString);
+    var x = document.createElement("A");
+    x.setAttribute("href", CsvString);
+    x.setAttribute("download", "somedata.csv");
+    document.body.appendChild(x);
+    x.click();
   }
 
   render() {
@@ -163,6 +220,12 @@ export default class Rows extends Component {
           }}
           onAdd={() => {
             this.setState({ editModal: true, edit_row_id: null })
+          }}
+          onExport={() => {
+            //alert("Exporting")
+
+            this.export()
+
           }}
         />
       }

@@ -126,7 +126,6 @@ export default function Entries(props) {
       if (field.depends && field.depends.split(".").length > 1) {
         let split = field.depends.split(".")
         if (!data[field.id] && storedRows[split[0]]) {
-          console.log("stored", storedRows[split[0]])
           setValue(field.id, storedRows[split[0]][split[1]], field.type)
         }
       }

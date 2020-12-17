@@ -147,7 +147,6 @@ function Layout(props) {
           _token: props.token
         },
           res => {
-            console.log("count", res.data)
             setNotifCount(res.data.count)
           },
           err => {
