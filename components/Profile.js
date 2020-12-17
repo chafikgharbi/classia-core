@@ -127,7 +127,7 @@ export default function Profile(props) {
   }, [printContent])
 
   const replaceRefs = (content) => {
-    let newContent = content.replace(/([\[(])(.+?)([\])])/g,
+    let newContent = content.replace(/(\[)(.+?)(\])/g,
       (match, p1, p2, p3, offset, string) => {
         console.log(p2)
         if (p2.includes("YYYY") && p2.includes("MM") && p2.includes("DD")) {
