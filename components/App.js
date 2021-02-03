@@ -168,11 +168,11 @@ function App({ Component, pageProps }) {
 
   const routing = (user) => {
     if (user) {
-      if (Router.pathname == "/login") router.push("/")
+      if (Router.pathname == "/login") router.push(config.afterLogin || "/")
       setPublic(false)
     } else {
       if (!config.public.includes(Router.pathname)) {
-        window.location.href = "/login"
+        window.location.href = config.afterLogout || "/login"
       } else {
         setPublic(true)
       }
