@@ -105,24 +105,24 @@ export default function PageHeader(props) {
             <div className="p-2" className="text-gray-800">
               {props.actions && props.actions.includes("import") &&
                 <IconButton aria-label="Importer" onClick={() => setOpenImporter(true)} >
-                  <FontAwesomeIcon icon={faUpload} className="text-base" />
+                  <FontAwesomeIcon icon={faUpload} style={{ width: "17px" }} className="text-base" />
                 </IconButton>
               }
               {props.actions && props.actions.includes("export") &&
                 <IconButton aria-label="Exporter" onClick={() => { props.onExport() }} >
-                  <FontAwesomeIcon icon={faCloudDownloadAlt} className="text-base" />
+                  <FontAwesomeIcon icon={faCloudDownloadAlt} style={{ width: "17px" }} className="text-base" />
                 </IconButton>
               }
               {filterFields && filterFields.length > 0 &&
                 <IconButton aria-label="Filtrer" onClick={(event) =>
                   setFiltersMenu(event.currentTarget)
                 } >
-                  <FontAwesomeIcon icon={faFilter} className="text-base" />
+                  <FontAwesomeIcon icon={faFilter} style={{ width: "17px" }} className="text-base" />
                 </IconButton>
               }
               {props.actions && props.actions.includes("add") &&
                 <IconButton aria-label="Ajouter" onClick={() => props.onAdd()} >
-                  <FontAwesomeIcon icon={faPlusCircle} className="text-base" />
+                  <FontAwesomeIcon icon={faPlusCircle} style={{ width: "17px" }} className="text-base" />
                 </IconButton>
               }
             </div>
