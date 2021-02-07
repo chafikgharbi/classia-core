@@ -73,6 +73,7 @@ export default class Rows extends Component {
                     }} >
                       <FontAwesomeIcon
                         className="cursor-pointer text-primary text-base"
+                        style={{ width: "15px" }}
                         icon={faEye}
                       />
                     </IconButton>
@@ -84,6 +85,7 @@ export default class Rows extends Component {
                     }} >
                       <FontAwesomeIcon
                         className="cursor-pointer text-primary text-base"
+                        style={{ width: "15px" }}
                         icon={faEdit}
                       />
                     </IconButton>
@@ -95,6 +97,7 @@ export default class Rows extends Component {
                     }} >
                       <FontAwesomeIcon
                         className="cursor-pointer text-primary text-base"
+                        style={{ width: "15px" }}
                         icon={faTrash}
                       />
                     </IconButton>

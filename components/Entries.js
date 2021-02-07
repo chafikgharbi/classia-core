@@ -821,7 +821,7 @@ export default function Entries(props) {
                 setAnchorEl(event.currentTarget);
                 setMenuOpen(true)
               }} >
-                <FontAwesomeIcon icon={faBars} className="text-base text-gray-600" />
+                <FontAwesomeIcon icon={faBars} style={{ width: "15px" }} className="text-base text-gray-600" />
               </IconButton>
               <IconButton aria-label="Ajouter" onClick={props.onClose} >
                 <CloseIcon />
