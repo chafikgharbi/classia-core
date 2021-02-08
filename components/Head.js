@@ -103,14 +103,14 @@ export default function PageHeader(props) {
         {(filterFields || (props.actions && props.actions.length > 0 && props.actions.includes("add"))) &&
           <div className="flex items-center p-2 -m-2">
             <div className="p-2" className="text-gray-800">
-              {props.actions && props.actions.includes("import") &&
+              {/*props.actions && props.actions.includes("import") &&
                 <IconButton aria-label="Importer" onClick={() => setOpenImporter(true)} >
                   <FontAwesomeIcon icon={faUpload} style={{ width: "17px" }} className="text-base" />
                 </IconButton>
-              }
+              */}
               {props.actions && props.actions.includes("export") &&
                 <IconButton aria-label="Exporter" onClick={() => { props.onExport() }} >
-                  <FontAwesomeIcon icon={faCloudDownloadAlt} style={{ width: "17px" }} className="text-base" />
+                  <FontAwesomeIcon icon={faCloudDownloadAlt} style={{ width: "22px" }} className="text-base" />
                 </IconButton>
               }
               {filterFields && filterFields.length > 0 &&
