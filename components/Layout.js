@@ -319,7 +319,7 @@ function Layout(props) {
 
           <div className="flex items-center mx-2">
             <Avatar alt="Profile Picture" src={props.photo || ""} className={classes.avatar} />
-            <div>
+            <div className="hidden sm:block">
               <div className="text-md font-bold">
                 {props.user.last_name} {props.user.first_name}
               </div>
