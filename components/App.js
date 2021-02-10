@@ -27,10 +27,10 @@ function App({ Component, pageProps }) {
   }
 
   const methods = {
-    ...store.methods(state, setState),
-    price: (value) => {
-      return numeral(value).format('0,0[.]00') + " " + (tenant.currency || "DA").toUpperCase()
-    }
+    price: (value, currency = false) => {
+      return numeral(value).format('0,0[.]00') + " " + (currency || tenant.currency || "DA").toUpperCase()
+    },
+    ...store.methods(state, setState)
   }
 
   const router = useRouter()

@@ -521,14 +521,16 @@ export default function Entries(props) {
               className="w-full"
               label={__(field.name)}
               variant="outlined"
-              value={numeral(data[field.id + "_currency"] ? data[field.id + "_original"] : data[field.id]).format('0,0[.]00')}
+              value={numeral(data[field.id + "_currency"] && data[field.id + "_currency"] != props.tenant.currency ? data[field.id + "_original"] : data[field.id]).format('0,0[.]00')}
               onChange={e => {
                 const eValue = e.target.value.replace(/,/g, '')
-                if (data[field.id + "_currency"]) {
+                if (data[field.id + "_currency"] && data[field.id + "_currency"] != props.tenant.currency) {
                   setValue(field.id + "_original", eValue)
                   setValue(field.id, eValue * parseFloat(props.tenant.exchange[data[field.id + "_currency"]]))
                 } else {
                   setValue(field.id, eValue)
+                  setValue(field.id + "_original", eValue)
+                  setValue(field.id + "_currency", props.tenant.currency || "DA")
                 }
               }
               } />
