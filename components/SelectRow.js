@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import server, { query } from "../library/api";
+import { query } from "../library/api";
 import { __ } from "../library/translation"
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import ListIcon from '@material-ui/icons/List';
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 export default function SelectRow(props) {
+
+  const [loading, setloading] = useState(true)
 
   const [list, setList] = useState([])
 
@@ -33,6 +36,7 @@ export default function SelectRow(props) {
   }
 
   const getList = () => {
+    setloading(true)
     query({
       model: ["=", props.model],
       ...(props.filters || []),
@@ -43,9 +47,11 @@ export default function SelectRow(props) {
       res => {
         setList(res.data.rows)
         setSelectedValue(res.data.rows, props.value)
+        setloading(false)
       },
       err => {
         console.log(err);
+        setloading(false)
       }
     )
   }
@@ -58,7 +64,7 @@ export default function SelectRow(props) {
       options={list}
       getOptionLabel={(option) => props.item(option)}
       renderOption={(option) => props.item(option)}
-      disabled={props.disabled}
+      disabled={loading || props.disabled}
       value={value || null}
       onChange={(event, newValue) => {
         setValue(newValue)
@@ -79,6 +85,7 @@ export default function SelectRow(props) {
                   <ListIcon onClick={props.onManage}
                     className="cursor-pointer text-gray-700" />
                 }
+                {loading && <CircularProgress size={20} className="ml-2" />}
                 {params.InputProps.endAdornment}
               </React.Fragment>
             ),

@@ -40,7 +40,7 @@ export default function PageHeader(props) {
   const [openImporter, setOpenImporter] = useState(false)
 
   useEffect(() => {
-    if (values.level && values.level[1]) {
+    if (props.state.levels && values.level && values.level[1]) {
       let subjects = []
       let level = props.state.levels.filter(l => l.id == values.level[1])[0]
       if (level) {
@@ -103,26 +103,26 @@ export default function PageHeader(props) {
         {(filterFields || (props.actions && props.actions.length > 0 && props.actions.includes("add"))) &&
           <div className="flex items-center p-2 -m-2">
             <div className="p-2" className="text-gray-800">
-              {props.actions && props.actions.includes("import") &&
+              {/*props.actions && props.actions.includes("import") &&
                 <IconButton aria-label="Importer" onClick={() => setOpenImporter(true)} >
-                  <FontAwesomeIcon icon={faUpload} className="text-base" />
+                  <FontAwesomeIcon icon={faUpload} style={{ width: "17px" }} className="text-base" />
                 </IconButton>
-              }
+              */}
               {props.actions && props.actions.includes("export") &&
-                <IconButton aria-label="Exporter" onClick={() => { }} >
-                  <FontAwesomeIcon icon={faCloudDownloadAlt} className="text-base" />
+                <IconButton aria-label="Exporter" onClick={() => { props.onExport() }} >
+                  <FontAwesomeIcon icon={faCloudDownloadAlt} style={{ width: "22px" }} className="text-base" />
                 </IconButton>
               }
               {filterFields && filterFields.length > 0 &&
                 <IconButton aria-label="Filtrer" onClick={(event) =>
                   setFiltersMenu(event.currentTarget)
                 } >
-                  <FontAwesomeIcon icon={faFilter} className="text-base" />
+                  <FontAwesomeIcon icon={faFilter} style={{ width: "17px" }} className="text-base" />
                 </IconButton>
               }
               {props.actions && props.actions.includes("add") &&
                 <IconButton aria-label="Ajouter" onClick={() => props.onAdd()} >
-                  <FontAwesomeIcon icon={faPlusCircle} className="text-base" />
+                  <FontAwesomeIcon icon={faPlusCircle} style={{ width: "17px" }} className="text-base" />
                 </IconButton>
               }
             </div>
@@ -141,7 +141,7 @@ export default function PageHeader(props) {
             >
               {filterFields && filterFields.map((field, index) => {
                 return <div key={index} className="p-2" style={{ minWidth: "300px" }}>
-                  {field.type == "model" &&
+                  {field.type == "row" &&
                     <SelectRow
                       model={field.model}
                       filters={field.filters || []}
@@ -196,7 +196,7 @@ export default function PageHeader(props) {
                         label="Niveau"
                       >
                         <MenuItem value="">Tous les niveaux</MenuItem>
-                        {props.state.levels.map((level, index) => {
+                        {(props.state.levels || []).map((level, index) => {
                           return <MenuItem key={index} value={level.id}>{level.name}</MenuItem>
                         })}
                       </Select>

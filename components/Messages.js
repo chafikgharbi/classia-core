@@ -157,7 +157,7 @@ export default function Messages(props) {
       query({
         model: ["=", "person"],
         ...(search != "" ? {
-          first_name: ["starts", search.toLowerCase(), " OR"],
+          first_name: ["starts", search.toLowerCase(), "OR"],
           last_name: ["starts", search.toLowerCase()],
         } : {}),
         email: ["<>", "NULL"],

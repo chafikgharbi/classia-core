@@ -15,6 +15,9 @@ import NextNprogress from 'nextjs-progressbar'
 import numeral from "numeral"
 import config from "project.config"
 
+const APP_NAME = 'next-pwa example'
+const APP_DESCRIPTION = 'This is an example of using next-pwa plugin'
+
 function App({ Component, pageProps }) {
 
   const [state, _setState] = useState({ lang: config.lang[0], ...store.state })
@@ -24,10 +27,10 @@ function App({ Component, pageProps }) {
   }
 
   const methods = {
-    ...store.methods(state, setState),
-    price: (value) => {
-      return numeral(value).format('0,0[.]00') + " " + (tenant.currency || "DA").toUpperCase()
-    }
+    price: (value, currency = false) => {
+      return numeral(value).format('0,0[.]00') + " " + (currency || tenant.currency || "DA").toUpperCase()
+    },
+    ...store.methods(state, setState)
   }
 
   const router = useRouter()
@@ -165,11 +168,11 @@ function App({ Component, pageProps }) {
 
   const routing = (user) => {
     if (user) {
-      if (Router.pathname == "/login") window.location.href = "/"
+      if (Router.pathname == "/login") router.push(config.afterLogin || "/")
       setPublic(false)
     } else {
       if (!config.public.includes(Router.pathname)) {
-        window.location.href = "/login"
+        window.location.href = config.afterLogout || "/login"
       } else {
         setPublic(true)
       }
@@ -257,23 +260,20 @@ function App({ Component, pageProps }) {
 
     <title>{tenant.title} | Classia</title>
 
-    {/*<link rel="manifest" href="/manifest.json" />
+    <meta name='application-name' content={APP_NAME} />
+    <meta name='apple-mobile-web-app-capable' content='yes' />
+    <meta name='apple-mobile-web-app-status-bar-style' content='default' />
+    <meta name='apple-mobile-web-app-title' content={APP_NAME} />
+    <meta name='description' content={APP_DESCRIPTION} />
+    <meta name='format-detection' content='telephone=no' />
+    <meta name='mobile-web-app-capable' content='yes' />
+    <meta name='theme-color' content='#FFFFFF' />
+    {/* TIP: set viewport head meta tag in _app.js, otherwise it will show a warning */}
+    {/* <meta name='viewport' content='minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, viewport-fit=cover' /> */}
 
-    <link rel="apple-touch-icon" sizes="57x57" href="/icons/apple-icon-57x57.png" />
-    <link rel="apple-touch-icon" sizes="60x60" href="/icons/apple-icon-60x60.png" />
-    <link rel="apple-touch-icon" sizes="72x72" href="/icons/apple-icon-72x72.png" />
-    <link rel="apple-touch-icon" sizes="76x76" href="/icons/apple-icon-76x76.png" />
-    <link rel="apple-touch-icon" sizes="114x114" href="/icons/apple-icon-114x114.png" />
-    <link rel="apple-touch-icon" sizes="120x120" href="/icons/apple-icon-120x120.png" />
-    <link rel="apple-touch-icon" sizes="144x144" href="/icons/apple-icon-144x144.png" />
-    <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-icon-152x152.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-icon-180x180.png" />
-    <link rel="icon" type="image/png" sizes="192x192" href="/icons/android-icon-192x192.png" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="96x96" href="/icons/favicon-96x96.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
-
-    <meta name="theme-color" content="#2196f3" />*/}
+    <link rel='apple-touch-icon' sizes='180x180' href='/icons/apple-touch-icon.png' />
+    <link rel='manifest' href='/manifest.json' />
+    <link rel='shortcut icon' href='/icons/favicon.ico' />
   </Head>
 
   if (router.query.noFrame)

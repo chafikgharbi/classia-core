@@ -17,18 +17,12 @@ function NotificationBody(props) {
     notifBuilder(props.user, props.token, (notifArray) => {
       let notification = { body: () => { } }
       notifArray.map(notif => {
-        let match = true
-        if (notif.model == props.row.model) {
-          for (const [key, value] of Object.entries(notif.conditions)) {
-            if (value != props.row[key]) match = false
-          }
-        } else {
-          match = false
+        if (notif.type && notif.type == props.row._notification_type) {
+          notification = notif
         }
-        if (match) notification = notif
       })
-      setBody(notification.body(props.row))
-      setPage(notification.page(props.row))
+      if (notification.body) setBody(notification.body(props.row))
+      if (notification.page) setPage(notification.page(props.row))
     })
   }, [props.row])
 
