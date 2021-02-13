@@ -248,12 +248,12 @@ export default function Entries(props) {
           // Set predefined
           if (props.entry.predefined) {
             for (const [key, value] of Object.entries(props.entry.predefined)) {
-              setValue(key, value)
+              if (!rowData[key]) setValue(key, value)
             }
           }
           if (props.override && props.override.predefined) {
             for (const [key, value] of Object.entries(props.override.predefined)) {
-              setValue(key, value)
+              if (!rowData[key]) setValue(key, value)
             }
           }
 
