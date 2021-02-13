@@ -524,9 +524,10 @@ export default function Entries(props) {
               value={numeral(data[field.id + "_currency"] && data[field.id + "_currency"] != props.tenant.currency ? data[field.id + "_original"] : data[field.id]).format('0,0[.]00')}
               onChange={e => {
                 const eValue = e.target.value.replace(/,/g, '')
+                console.log(data[field.id + "_currency"]);
                 if (data[field.id + "_currency"] && data[field.id + "_currency"] != props.tenant.currency) {
                   setValue(field.id + "_original", eValue)
-                  setValue(field.id, eValue * parseFloat(props.tenant.exchange[data[field.id + "_currency"]]))
+                  setValue(field.id, eValue * (props.tenant.exchange ? parseFloat(props.tenant.exchange[data[field.id + "_currency"]]) : 1))
                 } else {
                   setValue(field.id, eValue)
                   setValue(field.id + "_original", eValue)
