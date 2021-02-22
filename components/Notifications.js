@@ -7,6 +7,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { notifications as notifBuilder } from "src/config"
 import CircularProgress from '@material-ui/core/CircularProgress';
+import config from "project.config"
+import axios from "axios"
 
 function NotificationBody(props) {
 
@@ -104,6 +106,42 @@ export default function Notifications(props) {
       });
   }
 
+  const notify = (row) => {
+    const push_token = row.from_data && row.from_data.push_token ? row.from_data.push_token
+      : row.to_data && row.to_data.push_token ? row.to_data.push_token
+        : row.for_data && row.for_data.push_token ? row.for_data.push_token : null
+
+    if (row.from_data) {
+      // get parents tokens
+    }
+
+    if (push_token) {
+      axios({
+        method: "post",
+        url: "https://fcm.googleapis.com/fcm/send",
+        data: {
+          to: push_token,
+          data: {
+            notification: {
+              title: "FCM Message",
+              body: "This is an FCM Message"
+            }
+          }
+        },
+        headers: {
+          "Authorization": `key=${process.env.serverKey}`,
+          "Content-Type": "application/json",
+        }
+      })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(error => {
+          console.log(error)
+        });
+    }
+  }
+
   return <div style={{ width: "300px", maxWidth: "100%" }}>
     {loading ? <div className="flex justify-center p-10"><CircularProgress size={50} /></div> :
       rows.map((row, index) =>
@@ -137,10 +175,11 @@ export default function Notifications(props) {
                 PaperProps={{
                   style: {
                     maxHeight: 40 * 4.5,
-                    width: '20ch',
+                    width: 'auto',
                   },
                 }}
               >
+                {config.pushNotifications && <MenuItem onClick={() => notify(row)}>Envoyer une notification</MenuItem>}
                 <MenuItem onClick={() => setIgnored(row)}>Ignorer</MenuItem>
               </Menu>
             </div>

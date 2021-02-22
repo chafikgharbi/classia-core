@@ -841,7 +841,7 @@ export default function Entries(props) {
                 PaperProps={{
                   style: {
                     maxHeight: 40 * 4.5,
-                    width: '20ch',
+                    width: 'auto',
                   },
                 }}
               >

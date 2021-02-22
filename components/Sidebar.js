@@ -61,11 +61,6 @@ export default function Sidebar(props) {
       });
   }
 
-  useEffect(() => {
-    console.log("menu:")
-    console.log(menu)
-  }, [menu]);
-
   return (
     <>
       <div className="pt-3"></div>
