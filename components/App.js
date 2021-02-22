@@ -249,6 +249,11 @@ function App({ Component, pageProps }) {
       console.log('An error occurred while retrieving token. ', err);
       // ...
     });
+    messaging.onMessage((payload) => {
+      console.log('Message received. ', payload);
+      // ...
+      alert(payload);
+    });
   }
 
   const authListener = () => {
