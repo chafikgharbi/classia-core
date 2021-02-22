@@ -55,7 +55,7 @@ export default function Notifications(props) {
         query({
           ...filters,
           _notification_state: ["=", "active"],
-          _join: ["from", "to"],
+          _join: ["from", "for"],
           _start: 0,
           _limit: 99,
           _token: props.token
