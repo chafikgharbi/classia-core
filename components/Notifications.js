@@ -134,20 +134,9 @@ export default function Notifications(props) {
     }
   }
 
-  const notify = (row) => {
+  const notify = (row, index) => {
 
-    let notifBody = ""
-
-    notifBuilder(props.user, props.token, (notifArray) => {
-      let notification = { body: () => { } }
-      notifArray.map(notif => {
-        if (notif.type && notif.type == row._notification_type) {
-          notification = notif
-        }
-      })
-      if (notification.body) notifBody = notification.body(props.row)
-      if (notification.page) notifBody = notification.page(props.row)
-    })
+    let notifBody = document.getElementById("notif-" + index).textContent
 
     const push_token = row.from_data && row.from_data.push_token ? row.from_data.push_token
       : row.to_data && row.to_data.push_token ? row.to_data.push_token
@@ -162,8 +151,7 @@ export default function Notifications(props) {
       },
         res => {
           const parent = res.data.rows[0] || {}
-          console.log("ppt", parent.push_token, parent)
-          sendNotification(parent_push_token, notifBody)
+          sendNotification(parent.push_token, notifBody)
         },
         error => {
           console.log(error);
@@ -179,7 +167,7 @@ export default function Notifications(props) {
       rows.map((row, index) =>
         <div key={index}>
           <div className="flex items-start hover:bg-gray-200">
-            <div className="p-5 flex-grow cursor-pointer">
+            <div id={'notif-' + index} className="p-5 flex-grow cursor-pointer">
               <NotificationBody
                 user={props.user}
                 token={props.token}
@@ -211,7 +199,7 @@ export default function Notifications(props) {
                   },
                 }}
               >
-                {config.pushNotifications && <MenuItem onClick={() => notify(row)}>Envoyer une notification</MenuItem>}
+                {config.pushNotifications && <MenuItem onClick={() => notify(row, index)}>Envoyer une notification</MenuItem>}
                 <MenuItem onClick={() => setIgnored(row)}>Ignorer</MenuItem>
               </Menu>
             </div>
