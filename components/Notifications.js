@@ -106,15 +106,7 @@ export default function Notifications(props) {
       });
   }
 
-  const notify = (row) => {
-    const push_token = row.from_data && row.from_data.push_token ? row.from_data.push_token
-      : row.to_data && row.to_data.push_token ? row.to_data.push_token
-        : row.for_data && row.for_data.push_token ? row.for_data.push_token : null
-
-    if (row.from_data) {
-      // get parents tokens
-    }
-
+  const sendNotification = (push_token, notifBody) => {
     if (push_token) {
       axios({
         method: "post",
@@ -123,8 +115,8 @@ export default function Notifications(props) {
           to: push_token,
           data: {
             notification: {
-              title: "FCM Message",
-              body: "This is an FCM Message"
+              title: props.tenant.title,
+              body: notifBody
             }
           }
         },
@@ -140,6 +132,46 @@ export default function Notifications(props) {
           console.log(error)
         });
     }
+  }
+
+  const notify = (row) => {
+
+    let notifBody = ""
+
+    notifBuilder(props.user, props.token, (notifArray) => {
+      let notification = { body: () => { } }
+      notifArray.map(notif => {
+        if (notif.type && notif.type == row._notification_type) {
+          notification = notif
+        }
+      })
+      if (notification.body) notifBody = notification.body(props.row)
+      if (notification.page) notifBody = notification.page(props.row)
+    })
+
+    const push_token = row.from_data && row.from_data.push_token ? row.from_data.push_token
+      : row.to_data && row.to_data.push_token ? row.to_data.push_token
+        : row.for_data && row.for_data.push_token ? row.for_data.push_token : null
+
+    if (row.from_data && row.from_data.parent) {
+      // Get parent tokens
+      query({
+        model: ["=", "person"],
+        ref: ["=", row.from_data.parent],
+        _token: props.token
+      },
+        res => {
+          const parent = res.data.rows[0] || {}
+          console.log("ppt", parent.push_token, parent)
+          sendNotification(parent_push_token, notifBody)
+        },
+        error => {
+          console.log(error);
+        }
+      )
+    }
+
+    sendNotification(push_token, notifBody)
   }
 
   return <div style={{ width: "300px", maxWidth: "100%" }}>
