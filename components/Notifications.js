@@ -7,6 +7,8 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { notifications as notifBuilder } from "src/config"
 import CircularProgress from '@material-ui/core/CircularProgress';
+import config from "project.config"
+import axios from "axios"
 
 function NotificationBody(props) {
 
@@ -53,7 +55,7 @@ export default function Notifications(props) {
         query({
           ...filters,
           _notification_state: ["=", "active"],
-          _join: ["from", "to"],
+          _join: ["from", "for"],
           _start: 0,
           _limit: 99,
           _token: props.token
@@ -104,12 +106,68 @@ export default function Notifications(props) {
       });
   }
 
+  const sendNotification = (push_token, notifBody) => {
+    if (push_token) {
+      axios({
+        method: "post",
+        url: "https://fcm.googleapis.com/fcm/send",
+        data: {
+          to: push_token,
+          data: {
+            notification: {
+              title: props.tenant.title,
+              body: notifBody
+            }
+          }
+        },
+        headers: {
+          "Authorization": `key=${process.env.serverKey}`,
+          "Content-Type": "application/json",
+        }
+      })
+        .then(res => {
+          console.log(res)
+        })
+        .catch(error => {
+          console.log(error)
+        });
+    }
+  }
+
+  const notify = (row, index) => {
+
+    let notifBody = document.getElementById("notif-" + index).textContent
+
+    const push_token = row.from_data && row.from_data.push_token ? row.from_data.push_token
+      : row.to_data && row.to_data.push_token ? row.to_data.push_token
+        : row.for_data && row.for_data.push_token ? row.for_data.push_token : null
+
+    if (row.from_data && row.from_data.parent) {
+      // Get parent tokens
+      query({
+        model: ["=", "person"],
+        ref: ["=", row.from_data.parent],
+        _token: props.token
+      },
+        res => {
+          const parent = res.data.rows[0] || {}
+          sendNotification(parent.push_token, notifBody)
+        },
+        error => {
+          console.log(error);
+        }
+      )
+    }
+
+    sendNotification(push_token, notifBody)
+  }
+
   return <div style={{ width: "300px", maxWidth: "100%" }}>
     {loading ? <div className="flex justify-center p-10"><CircularProgress size={50} /></div> :
       rows.map((row, index) =>
         <div key={index}>
           <div className="flex items-start hover:bg-gray-200">
-            <div className="p-5 flex-grow cursor-pointer">
+            <div id={'notif-' + index} className="p-5 flex-grow cursor-pointer">
               <NotificationBody
                 user={props.user}
                 token={props.token}
@@ -137,10 +195,11 @@ export default function Notifications(props) {
                 PaperProps={{
                   style: {
                     maxHeight: 40 * 4.5,
-                    width: '20ch',
+                    width: 'auto',
                   },
                 }}
               >
+                {config.pushNotifications && <MenuItem onClick={() => notify(row, index)}>Envoyer une notification</MenuItem>}
                 <MenuItem onClick={() => setIgnored(row)}>Ignorer</MenuItem>
               </Menu>
             </div>

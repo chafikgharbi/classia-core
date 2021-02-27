@@ -210,11 +210,50 @@ function App({ Component, pageProps }) {
             user.superAdmin = true
           }
           setUser(user)
+          if (config.pushNotifications && user.row_id) getMessagingToken(user, token)
         })
         .catch(error => {
           console.log(error);
         });
     }
+  }
+
+  const getMessagingToken = (user, token) => {
+    require('firebase/messaging');
+    const messaging = firebase.messaging()
+    messaging.getToken({ vapidKey: process.env.vapidKey }).then((currentToken) => {
+      if (currentToken) {
+        // Send the token to your server and update the UI if necessary
+        // ...
+        console.log("Messaging token: " + currentToken)
+        const data = JSON.parse(user.data || '{}');
+        server({
+          method: "post",
+          url: "/rows/update/" + user.row_id,
+          data: {
+            data: { ...data, push_token: currentToken }
+          },
+          headers: { authorization: "Bearer " + token }
+        })
+          .then(res => {
+          })
+          .catch(error => {
+            console.log(error, "Couldn't update user push token")
+          });
+      } else {
+        // Show permission request UI
+        console.log('No registration token available. Request permission to generate one.');
+        // ...
+      }
+    }).catch((err) => {
+      console.log('An error occurred while retrieving token. ', err);
+      // ...
+    });
+    messaging.onMessage((payload) => {
+      console.log('Message received. ', payload);
+      // ...
+      alert(payload);
+    });
   }
 
   const authListener = () => {
