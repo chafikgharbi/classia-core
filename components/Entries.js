@@ -204,6 +204,9 @@ export default function Entries(props) {
               field.default
         )
       }
+      if (field.currency) {
+        setValue(field.id + "_currency", field.currency)
+      }
     })
     if (props.entry.predefined) {
       for (const [key, value] of Object.entries(props.entry.predefined)) {
@@ -498,7 +501,7 @@ export default function Entries(props) {
             label={__(field.name)}
             variant="outlined"
             value={val}
-            disabled={field.id == "ref" && props.id}
+            disabled={field.disabled ? field.disabled : field.id == "ref" && props.id}
             onChange={e => onChange(e.target.value)} />
         </div>
       case "number":
@@ -509,6 +512,7 @@ export default function Entries(props) {
             label={__(field.name)}
             variant="outlined"
             value={val}
+            disabled={field.disabled || false}
             onChange={e =>
               onChange(formatNumber(e.target.value))
             } />
@@ -521,6 +525,7 @@ export default function Entries(props) {
               className="w-full"
               label={__(field.name)}
               variant="outlined"
+              disabled={["price", "all"].includes(field.disabled)}
               value={numeral(data[field.id + "_currency"] && data[field.id + "_currency"] != props.tenant.currency ? data[field.id + "_original"] : data[field.id]).format('0,0[.]00')}
               onChange={e => {
                 const eValue = e.target.value.replace(/,/g, '')
@@ -559,6 +564,7 @@ export default function Entries(props) {
                     setValue(field.id + "_currency", e.target.value)
                     setValue(field.id + "_original", 0)
                   }}
+                  disabled={["currency", "all"].includes(field.disabled)}
                   label={__("Devise")}
                 >
                   <MenuItem value="">Défaut</MenuItem>
@@ -578,6 +584,7 @@ export default function Entries(props) {
             type="date"
             label={__(field.name)}
             variant="outlined"
+            disabled={field.disabled || false}
             value={val ? moment(val).format('YYYY-MM-DD') : moment(new Date()).format('YYYY-MM-DD')}
             onChange={e => onChange(moment(e.target.value).format('YYYY-MM-DD'))} />
         </div>
@@ -589,6 +596,7 @@ export default function Entries(props) {
             type="datetime-local"
             label={__(field.name)}
             variant="outlined"
+            disabled={field.disabled || false}
             value={val ? moment(val).format('YYYY-MM-DDTHH:mm') : moment(new Date()).format('YYYY-MM-DDTHH:mm')}
             onChange={e => onChange(moment(e.target.value).format('YYYY-MM-DD HH:mm:ss'))} />
         </div>
@@ -600,6 +608,7 @@ export default function Entries(props) {
             type="time"
             label={__(field.name)}
             variant="outlined"
+            disabled={field.disabled || false}
             value={val || "00:00"}
             onChange={e => onChange(e.target.value)} />
         </div>
