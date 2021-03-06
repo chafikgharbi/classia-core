@@ -106,7 +106,7 @@ export default function Notifications(props) {
       });
   }
 
-  const sendNotification = (push_token, notifBody) => {
+  const sendNotification = (push_token, notifBody, callback = () => { }) => {
     if (push_token) {
       axios({
         method: "post",
@@ -127,6 +127,7 @@ export default function Notifications(props) {
       })
         .then(res => {
           console.log(res)
+          callback(res)
         })
         .catch(error => {
           console.log(error)
@@ -137,6 +138,8 @@ export default function Notifications(props) {
   const notify = (row, index) => {
 
     let notifBody = document.getElementById("notif-" + index).textContent
+
+    const to_row = row.from_data || row.to_data || row.for_data || {}
 
     const push_token = row.from_data && row.from_data.push_token ? row.from_data.push_token
       : row.to_data && row.to_data.push_token ? row.to_data.push_token
@@ -151,7 +154,9 @@ export default function Notifications(props) {
       },
         res => {
           const parent = res.data.rows[0] || {}
-          sendNotification(parent.push_token, notifBody)
+          sendNotification(parent.push_token, notifBody, () => {
+            alert("Notification envoyée à " + parent.last_name + " " + parent.first_name);
+          })
         },
         error => {
           console.log(error);
@@ -159,7 +164,9 @@ export default function Notifications(props) {
       )
     }
 
-    sendNotification(push_token, notifBody)
+    sendNotification(push_token, notifBody, () => {
+      alert("Notification envoyée à " + to_row.last_name + " " + to_row.first_name);
+    })
   }
 
   return <div style={{ width: "300px", maxWidth: "100%" }}>
