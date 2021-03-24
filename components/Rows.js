@@ -39,7 +39,7 @@ export default class Rows extends Component {
 
     } else {
 
-      if (this.props.view !== "grid") {
+      if (this.props.view !== "grid" && this.props.view !== "custom") {
         let columns = []
         this.props.columns.map(column => {
           let newColumn = column
@@ -357,13 +357,32 @@ export default class Rows extends Component {
                 </div> : <div className="py-10 text-center">{__("Aucune donnée trouvée")}</div>
               }
             </> :
-            <>
-              {this.props.noFrame ? table :
-                <Paper className="overflow-hidden">
-                  {table}
+            this.props.view == "custom" ? <>
+              {!this.props.noHeader &&
+                <Paper>
+                  <Header {...this.props}
+                    title={this.props.title}
+                    filterFields={this.props.filterFields}
+                    setFilters={(filters) => {
+                      this.setState({ filters }, () => {
+                        this.refresh()
+                      })
+                    }}
+                    onAdd={() => {
+                      this.setState({ editModal: true, edit_row_id: null })
+                    }}
+                  />
                 </Paper>
               }
-            </>
+              {this.props.renderContent(this.state.rows, this)}
+            </> :
+              <>
+                {this.props.noFrame ? table :
+                  <Paper className="overflow-hidden">
+                    {table}
+                  </Paper>
+                }
+              </>
           }
           {this.props.highlightOnHover && <style global jsx>{`
             .rdt_TableRow:hover,
