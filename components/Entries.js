@@ -624,6 +624,34 @@ export default function Entries(props) {
             value={val}
             onChange={e => onChange(e.target.value)} />
         </div>
+      case "emailphone":
+
+        let newVal = val
+        let emailUsername = val.split("@")[0]
+        let emailDomain = val.split("@")[1] || "classia.io"
+
+        if (!isNaN(emailUsername) && emailUsername.length == 10) {
+          newVal = emailUsername
+        }
+
+        return <div className="p-3" key={field.id}>
+          <TextField
+            {...fieldProps}
+            className="w-full"
+            type="text"
+            autoComplete="new-password"
+            label={__(field.name)}
+            variant="outlined"
+            value={newVal}
+            onChange={e => {
+              let string = e.target.value
+              if (!isNaN(string) && string.length == 10) {
+                onChange(e.target.value + "@" + emailDomain)
+              } else {
+                onChange(e.target.value)
+              }
+            }} />
+        </div>
       case "password":
         return <div className="p-3" key={field.id}>
           <TextField
