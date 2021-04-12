@@ -16,6 +16,7 @@ import Select from '@material-ui/core/Select'
 import MenuItem from '@material-ui/core/MenuItem'
 import Avatar from '@material-ui/core/Avatar'
 import Badge from '@material-ui/core/Badge'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack'
 import NotificationsIcon from '@material-ui/icons/Notifications'
 import ChatBubbleIcon from '@material-ui/icons/ChatBubble'
 import Sidebar from "./Sidebar"
@@ -190,8 +191,11 @@ function Layout(props) {
             const docData = change.doc.data()
 
             if (change.type === "added") {
+              console.log("rcb", _recentChat)
               _recentChat = _recentChat.filter(c => c.with != docData.from)
+              console.log("rca", _recentChat)
               _recentChat.unshift({ id: change.doc.id, with: docData.from, ...docData })
+              console.log("rcu", _recentChat)
               _newMsgs.push({ id: change.doc.id, ...docData })
             }
             if (change.type === "modified") {
@@ -247,6 +251,7 @@ function Layout(props) {
           >
             <MenuIcon />
           </IconButton>
+          <div className="px-2 cursor-pointer" onClick={() => props.router.back()}><ArrowBackIcon /></div>
           <div className="flex-grow flex items-center">
             {(!config.logo || config.logo == "image" || config.logo == "image-title") &&
               <img src={props.tenant.logo} style={{ height: "50px" }} />
