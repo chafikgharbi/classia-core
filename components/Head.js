@@ -22,8 +22,6 @@ export default function PageHeader(props) {
       let _filterFields = props.filterFields
       if (props.override && props.override.removeFilterFields) {
         props.override.removeFilterFields.map(field => {
-          //delete _filterFields[field]
-          console.log("ff", _filterFields)
           _filterFields = _filterFields.filter(f => f.selector != field)
         })
       }

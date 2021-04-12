@@ -190,11 +190,8 @@ function Layout(props) {
             const docData = change.doc.data()
 
             if (change.type === "added") {
-              console.log("rcb", _recentChat)
               _recentChat = _recentChat.filter(c => c.with != docData.from)
-              console.log("rca", _recentChat)
               _recentChat.unshift({ id: change.doc.id, with: docData.from, ...docData })
-              console.log("rcu", _recentChat)
               _newMsgs.push({ id: change.doc.id, ...docData })
             }
             if (change.type === "modified") {

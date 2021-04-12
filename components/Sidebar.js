@@ -46,7 +46,6 @@ export default function Sidebar(props) {
   const toggleItem = (group, index) => {
     let newMenu = menu
     newMenu[group][index].open = !newMenu[group][index].open
-    console.log(newMenu)
     setMenu([...newMenu])
   }
 

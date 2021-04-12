@@ -133,7 +133,6 @@ export default class ChatBox extends Component {
 
   handleActivity = (isActive) => {
     return this.setState({ windowActive: isActive }, () => {
-      console.log("active", isActive)
       if (isActive) {
         this.state.messages.map(m => this.setSeen(m))
       }
@@ -182,7 +181,6 @@ export default class ChatBox extends Component {
         let withUser = recentChat.filter(rc => rc.with == message.to)[0]
         if (withUser) recentChat = recentChat.filter(rc => rc.with != message.to)
         recentChat.unshift({ ...message, with: message.to })
-        console.log("rc", recentChat)
         firestore.collection('recentChat').doc(this.props.tenant.id + "-" + this.props.user.row_id).set({
           user: this.props.user.row_id,
           chat: recentChat
@@ -227,31 +225,31 @@ export default class ChatBox extends Component {
                   </Grid>
                 </Grid>
               </> : <>
-                  <ListItemIcon>
-                    <Avatar
-                      alt={`${this.props.chat.user.last_name} ${this.props.chat.user.first_name}`}
-                      src={this.props.chat.user.photo}
-                    />
-                  </ListItemIcon>
-                  <Grid container>
-                    <Grid item xs={12}>
-                      <ListItemText
-                        align="left"
-                        primary={m.content} />
-                    </Grid>
-                    <Grid item xs={12}>
-                      <ListItemText
-                        align="left"
-                        secondary={moment(m.sentAtUnix, "x").format("hh:mm")} />
-                      {(index == this.state.messages.length - 1) && m.seenAt
-                        && m.from == this.props.user.row_id &&
-                        <ListItemText
-                          align="right"
-                          secondary="Vu"></ListItemText>
-                      }
-                    </Grid>
+                <ListItemIcon>
+                  <Avatar
+                    alt={`${this.props.chat.user.last_name} ${this.props.chat.user.first_name}`}
+                    src={this.props.chat.user.photo}
+                  />
+                </ListItemIcon>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <ListItemText
+                      align="left"
+                      primary={m.content} />
                   </Grid>
-                </>}
+                  <Grid item xs={12}>
+                    <ListItemText
+                      align="left"
+                      secondary={moment(m.sentAtUnix, "x").format("hh:mm")} />
+                    {(index == this.state.messages.length - 1) && m.seenAt
+                      && m.from == this.props.user.row_id &&
+                      <ListItemText
+                        align="right"
+                        secondary="Vu"></ListItemText>
+                    }
+                  </Grid>
+                </Grid>
+              </>}
             </ListItem>
           )}
         </List>

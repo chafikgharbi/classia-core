@@ -131,8 +131,11 @@ export default class Rows extends Component {
       _token: this.props.token
     },
       res => {
+        let rows = res.data.rows.map((row, index) => {
+          return { _index: index, ...row }
+        })
         this.setState({
-          rows: res.data.rows,
+          rows: rows,
           pagination: res.data.pagination,
           loadingData: false,
         })
@@ -189,8 +192,6 @@ export default class Rows extends Component {
       })
       results.push(line)
     })
-
-    console.log(results)
 
     var CsvString = "";
     results.forEach((RowItem, RowIndex) => {
@@ -249,7 +250,6 @@ export default class Rows extends Component {
           this.getRows(this.state.rowsPerPage * (page - 1))
         }}
         onChangeRowsPerPage={(currentRowsPerPage, currentPage) => {
-          console.log(currentRowsPerPage, currentPage)
           this.setState({ rowsPerPage: currentRowsPerPage, currentPage }, () => {
             this.getRows(currentRowsPerPage * (currentPage - 1))
           })

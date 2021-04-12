@@ -61,7 +61,6 @@ export default function Notifications(props) {
           _token: props.token
         },
           res => {
-            console.log(res.data)
             setRows(res.data.rows)
             setLoading(false)
           },
@@ -98,7 +97,6 @@ export default function Notifications(props) {
         let newRows = rows.filter(r => r.id != row.id)
         setRows(newRows)
         props.updateCount(-1)
-        console.log("ignored", row.id, res)
       })
       .catch(error => {
         console.log(error);
@@ -126,7 +124,6 @@ export default function Notifications(props) {
         }
       })
         .then(res => {
-          console.log(res)
           callback(res)
         })
         .catch(error => {

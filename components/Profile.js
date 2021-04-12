@@ -100,7 +100,6 @@ export default function Profile(props) {
         _token: props.token
       },
         (res) => {
-          console.log("docs", res.data)
           setDocuments(res.data.rows)
         },
         (err) => {
@@ -129,7 +128,6 @@ export default function Profile(props) {
   const replaceRefs = (content) => {
     let newContent = content.replace(/(\[)(.+?)(\])/g,
       (match, p1, p2, p3, offset, string) => {
-        console.log(p2)
         if (p2.includes("YYYY") && p2.includes("MM") && p2.includes("DD")) {
           return moment(new Date()).format(p2)
         }

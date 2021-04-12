@@ -165,7 +165,6 @@ export default function Messages(props) {
         _limit: 10,
         _token: props.token
       }, res => {
-        console.log("search users")
         setUsers(res.data.rows)
       }, (err) => {
         console.log(err)
@@ -195,9 +194,6 @@ export default function Messages(props) {
           id: ["in", rcUsersAuths],
           _token: props.token
         }, res => {
-
-          console.log("rc rows", res.data.rows)
-
           let _rcUsers = []
           props.recentChat.map(rc => {
             let user = res.data.rows.filter(u => u.id == rc.with)[0]

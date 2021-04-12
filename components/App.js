@@ -292,7 +292,7 @@ function App({ Component, pageProps }) {
   }, [pageProps])
 
   const header = <Head>
-    <meta charset='utf-8' />
+    <meta charSet='utf-8' />
     <meta name='viewport' content='width=device-width, user-scalable=no' />
     <meta name='description' content='Application Ecole' />
     <meta name='keywords' content='Keywords' />

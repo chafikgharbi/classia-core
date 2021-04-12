@@ -295,7 +295,6 @@ export default function Entries(props) {
       headers: { authorization: "Bearer " + props.token }
     })
       .then(res => {
-        console.log("access", res.data)
         if (res.data.email) {
           setAccess(true)
         } else {

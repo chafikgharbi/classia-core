@@ -32,7 +32,6 @@ export default function ImageUpload(props) {
       headers: { authorization: "Bearer " + props.token }
     })
       .then(res => {
-        console.log(res.data);
         let id = res.data.inserted.insertId
         let ref = res.data.inserted.insertRef
         _callback(id)
