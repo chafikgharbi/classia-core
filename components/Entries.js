@@ -529,15 +529,27 @@ export default function Entries(props) {
               onChange={e => {
                 const eValue = e.target.value.replace(/,/g, '')
                 setValue(field.id, eValue)
+
+                // Todo: this code is only valid for two currencies
                 if (data[field.id + "_currency"] && data[field.id + "_currency"] != props.tenant.currency) {
+                  const exchange = eValue * (props.tenant.exchange ? parseFloat(props.tenant.exchange[data[field.id + "_currency"]]) : 1)
+                  setValue(field.id, exchange)
                   setValue(field.id + "_original", eValue)
-                  setValue(field.id, eValue * (props.tenant.exchange ? parseFloat(props.tenant.exchange[data[field.id + "_currency"]]) : 1))
+                  // Add currencies values
+                  setValue(field.id + "_" + (props.tenant.currency || "DA"), exchange)
+                  setValue(field.id + "_" + data[field.id + "_currency"], eValue)
                 } else {
                   setValue(field.id + "_original", eValue)
                   setValue(field.id + "_currency", props.tenant.currency || "DA")
+                  // Add currencies values
+                  props.state.currencies.map((c, index) => {
+                    setValue(field.id + "_" + c.id,
+                      c.id == props.tenant.currency ? eValue
+                        : props.tenant.exchange ? eValue / parseFloat(props.tenant.exchange[c.id]) : 0
+                    )
+                  })
                 }
-              }
-              } />
+              }} />
             {data[field.id + "_currency"] &&
               <div className="absolute text-base font-bold text-primary bottom-0 right-0 p-2 px-3"
                 style={{ pointerEvents: "none", fontFamily: "monospace" }}>

@@ -78,7 +78,7 @@ export default class Rows extends Component {
                       />
                     </IconButton>
                   }
-                  {actions.includes("edit") &&
+                  {actions.includes("edit") && (!this.props.editOn || this.props.editOn(row) == true) &&
                     <IconButton aria-label="Ajouter" onClick={(e) => {
                       this.setState({ editModal: true, edit_row_id: row.id })
                       e.stopPropagation();

@@ -134,28 +134,30 @@ function Layout(props) {
   const [notifCount, setNotifCount] = useState(0)
 
   useEffect(() => {
-    notifBuilder(props.user, props.token, (notifArray) => {
-      if (notifArray.length > 0) {
-        let filters = {}
-        notifArray.map(notification => {
-          filters = { ...filters, ...notification.filters }
-        })
-        query({
-          ...filters,
-          _count: [],
-          _notification_state: ["=", "active"],
-          scholar_year: ["=", props.state.scholarYear],
-          _token: props.token
-        },
-          res => {
-            setNotifCount(res.data.count)
+    if (config.notifications !== false) {
+      notifBuilder(props.user, props.token, (notifArray) => {
+        if (notifArray.length > 0) {
+          let filters = {}
+          notifArray.map(notification => {
+            filters = { ...filters, ...notification.filters }
+          })
+          query({
+            ...filters,
+            _count: [],
+            _notification_state: ["=", "active"],
+            scholar_year: ["=", props.state.scholarYear],
+            _token: props.token
           },
-          err => {
-            console.log(err);
-          }
-        )
-      }
-    })
+            res => {
+              setNotifCount(res.data.count)
+            },
+            err => {
+              console.log(err);
+            }
+          )
+        }
+      })
+    }
   }, [])
 
   const [newMsgs, setNewMsgs] = useState([])
@@ -311,12 +313,14 @@ function Layout(props) {
                 </Badge>
               </IconButton>
             }
-            <IconButton aria-label={`Afficher les ${notifCount} notifications`}
-              color="inherit" onClick={() => setOpenNotif(true)}>
-              <Badge badgeContent={notifCount} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            {config.notifications !== false &&
+              <IconButton aria-label={`Afficher les ${notifCount} notifications`}
+                color="inherit" onClick={() => setOpenNotif(true)}>
+                <Badge badgeContent={notifCount} color="secondary">
+                  <NotificationsIcon />
+                </Badge>
+              </IconButton>
+            }
           </div>
 
           <div className="flex items-center mx-2">
